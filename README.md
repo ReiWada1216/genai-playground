@@ -73,27 +73,50 @@ mkdir -p 00_data/img_align_celeba/img_align_celeba/
 
 ## 📊 使用方法
 
-### トレーニング
+### How to Run
 
-#### VAEのトレーニング
+#### メインアプリケーションの実行
+```bash
+python 02_app/main.py
+```
+
+#### トレーニング
+
+##### VAEのトレーニング
 ```bash
 python 04_scripts/train_vae.py
 ```
 
-#### VQ-VAEのトレーニング
+##### VQ-VAEのトレーニング
 ```bash
 python 04_scripts/train_vqvqe.py
 ```
 
-#### Diffusion Modelのトレーニング
+##### Diffusion Modelのトレーニング
 ```bash
 python 04_scripts/train_diffusion.py
 ```
 
-### Web UI
+### How to Test
+
+プロジェクトのテストを実行するには、以下のコマンドを使用してください：
+
 ```bash
-python 02_app/main.py
+pytest test_main.py
 ```
+
+**注意**: `test_main.py`ファイルが存在しない場合は、まずテストファイルを作成する必要があります。
+
+## 🖼️ 画像サイズについて
+
+このプロジェクトでは、異なるコンポーネントで異なる画像サイズを使用しています：
+
+- **CelebAデータセットの元画像**: 218×178ピクセル
+- **ノートブック実験**: 128×128ピクセル（高解像度実験用）
+- **メインアプリケーション**: 64×64ピクセル（リアルタイム処理用）
+- **トレーニングスクリプト**: 64×64ピクセル（メモリ効率重視）
+
+画像サイズは各モデルのアーキテクチャに合わせて最適化されており、64×64は計算効率と品質のバランスを取った設定です。
 
 ## 🎨 実装されているモデル
 
