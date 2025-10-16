@@ -43,7 +43,11 @@ class VAE(nn.Module):
         self.enc_var = nn.Linear(self.enc_flat, z_dim)
 
         #Decoder: zを入力として、ガウス分布のパラメータmu, sigmaを出力
-        self.fc_dec = nn.Linear(z_dim, self.enc_flat)
+        self.fc_dec = nn.Sequential(
+            nn.Linear(z_dim, self.enc_flat),
+            nn.BatchNorm1d(self.enc_flat), # 1次元のBatchNormを追加
+            nn.ReLU(inplace=True)
+        )
         self.conv_dec = nn.Sequential(
             nn.ConvTranspose2d(512, 256, 4, 2, 1), # -> [B, 256, 8, 8]
             nn.BatchNorm2d(256),

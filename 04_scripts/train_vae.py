@@ -181,7 +181,7 @@ if __name__ == '__main__':  # スクリプトが直接実行された場合の�
     # コマンドラインから学習設定を受け取るためのパーサー
     parser = argparse.ArgumentParser(description="Train VAE Model")  # 引数パーサーを作成
     parser.add_argument('--data_path', type=str, default='./data', help='path to dataset')  # データセットのパス
-    parser.add_argument('--lr', type=float, default=1e-3, help='learning rate')  # 学習率
+    parser.add_argument('--lr', type=float, default=1e-4, help='learning rate')  # 学習率
     parser.add_argument('--batch_size', type=int, default=64, help='batch size')  # バッチサイズ
     parser.add_argument('--epochs', type=int, default=50, help='number of epochs')  # エポック数
     parser.add_argument('--checkpoint_dir', type=str, default='./checkpoints', help='directory to save checkpoints')  # チェックポイント保存ディレクトリ
