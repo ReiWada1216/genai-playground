@@ -62,7 +62,7 @@ class VAE(nn.Module):
             nn.Sigmoid()  # 出力を [0,1] に収める
         )
 
-    def _encoder(self, x: torch.Tensor):
+    def encode(self, x: torch.Tensor):
       """
       エンコーダは、xから平均と分散を出力するところ!!
       -------------
@@ -75,7 +75,7 @@ class VAE(nn.Module):
       log_var = self.enc_var(x) #対数分散
       return mean, log_var
 
-    def _sample_z(self, mean: torch.Tensor, log_var: torch.Tensor) -> torch.Tensor:
+    def sample_z(self, mean: torch.Tensor, log_var: torch.Tensor) -> torch.Tensor:
       """
       VAEでは「潜在変数 𝑧」を確率的にサンプリングする.
       しかし、確率的なサンプリングでは微分が不可能になる.
@@ -92,7 +92,7 @@ class VAE(nn.Module):
       z = mean + std * eps
       return z
 
-    def _decoder(self, z: torch.Tensor) -> torch.Tensor:
+    def decode(self, z: torch.Tensor) -> torch.Tensor:
         """
         VAEのデコーダ部分:zを受け取り、xを再構成する
         ----------
@@ -123,9 +123,9 @@ class VAE(nn.Module):
         z : torch.Tensor ( b, z_dim )
               潜在変数．
         """
-        mean, log_var = self._encoder(x)
-        z = self._sample_z(mean, log_var)
-        x_hat = self._decoder(z)
+        mean, log_var = self.encode(x)
+        z = self.sample_z(mean, log_var)
+        x_hat = self.decode(z)
         return x_hat, mean, log_var
 
     def loss(self, x: torch.Tensor):
@@ -142,9 +142,9 @@ class VAE(nn.Module):
         KL: Torch.Tensor(, )
           正則化, エンコーダ（ガウス分布）と事前分布（標準ガウス分布）のKLダイバージェンス
         """
-        mean, log_var = self._encoder(x)
-        z = self._sample_z(mean, log_var)
-        x_hat = self._decoder(z)
+        mean, log_var = self.encode(x)
+        z = self.sample_z(mean, log_var)
+        x_hat = self.decode(z)
 
         #-----KLのダイバージェンス, mean, std: (B, z_dim)
         #torch.meanはbatch_sizeに関するもの
